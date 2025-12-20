@@ -1,0 +1,35 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, AuthContext } from './utils/context/AuthContext';
+import { useContext } from 'react';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Dashboard from './pages/Dashboard';
+import ProposalBuilder from './pages/ProposalBuilder';
+import MyProposals from './pages/MyProposals';
+
+const PrivateRoute = ({ children }) => {
+  const { user, loading } = useContext(AuthContext);
+  if (loading) return <div>Loading...</div>;
+  return user ? children : <Navigate to="/login" />;
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/dashboard/proposals" element={<PrivateRoute><MyProposals /></PrivateRoute>} />
+          <Route path="/dashboard/proposal-builder" element={<PrivateRoute><ProposalBuilder /></PrivateRoute>} />
+          <Route path="/dashboard/proposal-builder/:id" element={<PrivateRoute><ProposalBuilder /></PrivateRoute>} />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
