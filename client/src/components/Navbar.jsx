@@ -44,7 +44,7 @@ const Navbar = () => {
     url.searchParams.set("user_name", userName);
     url.searchParams.set("user_email", userEmail);
     url.searchParams.set("user_id", userId);
-    window.open(url.toString(), "_blank");
+    window.location.href = url.toString();
   };
 
   const handleLogout = () => {
