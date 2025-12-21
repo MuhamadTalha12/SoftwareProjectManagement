@@ -21,13 +21,25 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user_email", user_email);
       // Remove search params from URL
       window.history.replaceState({}, document.title, window.location.pathname);
-      // Delay fetchUser to ensure token is set
+      // Redirect to dashboard and fetch user after navigation
       setTimeout(() => {
-        setUser({ id: user_id, name: user_name, email: user_email });
-        setLoading(false);
+        window.location.replace("/dashboard");
       }, 100);
-      return;
+      // return;
     }
+    // If token is already present, fetch user
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      // fetchUser();
+      setUser({
+        id: localStorage.getItem("user_id"),
+        name: localStorage.getItem("user_name"),
+        email: localStorage.getItem("user_email"),
+      });
+
+      // return;
+    }
+    setLoading(false);
   }, []);
 
   const fetchUser = async () => {
