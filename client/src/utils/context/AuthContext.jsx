@@ -1,5 +1,5 @@
-import { createContext, useState, useEffect } from 'react';
-import api from '../api';
+import { createContext, useState, useEffect } from "react";
+import api from "../api";
 
 export const AuthContext = createContext();
 
@@ -8,45 +8,46 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Auth bypass for MCP-only flows.
-    // If you set `VITE_BYPASS_AUTH=true` or provide `VITE_MCP_TOKEN`, we skip the local REST auth.
-    const bypassAuth = String(import.meta.env.VITE_BYPASS_AUTH || '').toLowerCase() === 'true';
-
-    const envMcpToken = import.meta.env.VITE_MCP_TOKEN;
-
-    if (bypassAuth || envMcpToken) {
-      setUser({ name: 'MCP User' });
-      setLoading(false);
+    // Extract token and user info from URL params if present
+    const searchParams = new URLSearchParams(window.location.search);
+    const token = searchParams.get("token");
+    const user_id = searchParams.get("user_id");
+    const user_name = searchParams.get("user_name");
+    const user_email = searchParams.get("user_email");
+    if (token && user_id && user_name && user_email) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("user_id", user_id);
+      localStorage.setItem("user_name", user_name);
+      localStorage.setItem("user_email", user_email);
+      // Remove search params from URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+      // Delay fetchUser to ensure token is set
+      setTimeout(() => {
+        setUser({ id: user_id, name: user_name, email: user_email });
+        setLoading(false);
+      }, 100);
       return;
     }
-
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetchUser();
-      return;
-    }
-
-    setLoading(false);
   }, []);
 
   const fetchUser = async () => {
     try {
-      const { data } = await api.get('/auth/me');
+      const { data } = await api.get("/auth/me");
       setUser(data);
     } catch (error) {
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
     } finally {
       setLoading(false);
     }
   };
 
   const login = (token, userData) => {
-    localStorage.setItem('token', token);
+    localStorage.setItem("token", token);
     setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setUser(null);
   };
 

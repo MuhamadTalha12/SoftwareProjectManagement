@@ -23,25 +23,7 @@ const PrivateRoute = ({ children }) => {
 
 // New component to handle routes and URL param logic
 function AppRoutes() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const token = searchParams.get("token");
-    const user_id = searchParams.get("user_id");
-    const user_name = searchParams.get("user_name");
-    const user_email = searchParams.get("user_email");
-    if (token && user_id && user_name && user_email) {
-      localStorage.setItem("token", token);
-      localStorage.setItem("user_id", user_id);
-      localStorage.setItem("user_name", user_name);
-      localStorage.setItem("user_email", user_email);
-      // Remove search params from URL
-      window.history.replaceState({}, document.title, location.pathname);
-      navigate("/dashboard", { replace: true });
-    }
-  }, [location, navigate]);
+  // ...existing code...
 
   return (
     <Routes>
