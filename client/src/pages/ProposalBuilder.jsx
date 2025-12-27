@@ -315,7 +315,7 @@ const ProposalBuilder = () => {
     { number: 11, title: 'Appendices', icon: FiPaperclip, color: 'from-gray-500 to-gray-600', required: false },
   ];
 
-  const renderStepContent = () => {
+ const renderStepContent = () => {
     const getIcon = (step) => steps[step - 1]?.icon || FiFileText;
     const StepIcon = getIcon(currentStep);
     
@@ -374,7 +374,141 @@ const ProposalBuilder = () => {
           }
         ]
       },
-      // ... other step configurations (truncated for brevity, but follow the same pattern)
+      3: {
+        label: 'Introduction & Background',
+        description: 'Establish context and demonstrate your understanding of the field',
+        fields: [
+          {
+            name: 'introductionAndBackground',
+            label: 'Introduction and Background',
+            type: 'textarea',
+            required: true,
+            placeholder: 'Describe the background context, existing research, and rationale for your proposed work. Explain the current state of knowledge and how your project builds upon or addresses gaps in existing literature.',
+            icon: FiTarget,
+            rows: 12
+          }
+        ]
+      },
+      4: {
+        label: 'Statement of Need',
+        description: 'Clearly articulate the problem your research addresses',
+        fields: [
+          {
+            name: 'statementOfNeed',
+            label: 'Statement of Need',
+            type: 'textarea',
+            required: true,
+            placeholder: 'Explain the problem or gap that your research addresses and why it\'s important. Describe the significance of the problem, who it affects, and why current solutions are inadequate.',
+            icon: FiAlertCircle,
+            rows: 12
+          }
+        ]
+      },
+      5: {
+        label: 'Goals & Objectives',
+        description: 'Define clear, measurable goals for your research project',
+        fields: [
+          {
+            name: 'goalsObjectivesAndSpecificAims',
+            label: 'Goals, Objectives and Specific Aims',
+            type: 'textarea',
+            required: true,
+            placeholder: 'Clearly outline your research goals, objectives, and specific aims. Make them SMART (Specific, Measurable, Achievable, Relevant, Time-bound).',
+            icon: FiAward,
+            rows: 12
+          }
+        ]
+      },
+      6: {
+        label: 'Commercialization Strategy',
+        description: 'Explain how your research will translate to real-world impact',
+        fields: [
+          {
+            name: 'commercializationStrategy',
+            label: 'Commercialization Strategy',
+            type: 'textarea',
+            required: false,
+            placeholder: 'Describe how your research findings will be commercialized or transferred to market. Include IP considerations, market analysis, partnership opportunities, and revenue models if applicable.',
+            icon: FiBriefcase,
+            rows: 10
+          }
+        ]
+      },
+      7: {
+        label: 'Budget & Justification',
+        description: 'Detail your financial needs with clear justifications',
+        fields: [
+          {
+            name: 'budgetAndJustification',
+            label: 'Budget and Justification',
+            type: 'textarea',
+            required: true,
+            placeholder: 'Provide detailed budget breakdown and justification for each expense. Include personnel costs, equipment, materials, travel, indirect costs, and any other expenses. Explain why each item is necessary for project success.',
+            icon: FiDollarSign,
+            rows: 12
+          }
+        ]
+      },
+      8: {
+        label: 'Timeline & Milestones',
+        description: 'Outline your project schedule with clear deliverables',
+        fields: [
+          {
+            name: 'timelineAndMilestone',
+            label: 'Timeline and Milestones',
+            type: 'textarea',
+            required: true,
+            placeholder: 'Outline your project timeline with specific milestones and deliverables. Include Gantt chart details, quarterly objectives, and key decision points. Show realistic timeframes for each phase.',
+            icon: FiClock,
+            rows: 12
+          }
+        ]
+      },
+      9: {
+        label: 'Evaluation & Impact',
+        description: 'Describe how you will measure success and impact',
+        fields: [
+          {
+            name: 'evaluationAndImpactPlans',
+            label: 'Evaluation and Impact Plans',
+            type: 'textarea',
+            required: true,
+            placeholder: 'Describe how you will evaluate the success of your research and measure its impact. Include metrics, assessment methods, data collection plans, and how results will be disseminated.',
+            icon: FiBarChart2,
+            rows: 12
+          }
+        ]
+      },
+      10: {
+        label: 'Sustainability Plans',
+        description: 'Explain how your project will continue beyond initial funding',
+        fields: [
+          {
+            name: 'sustainabilityPlans',
+            label: 'Sustainability Plans',
+            type: 'textarea',
+            required: false,
+            placeholder: 'Explain how your research project will be sustained beyond the funding period. Discuss future funding sources, institutional support, partnerships, and long-term viability.',
+            icon: FiGlobe,
+            rows: 10
+          }
+        ]
+      },
+      11: {
+        label: 'Appendices & Supporting Materials',
+        description: 'List additional documents and supporting evidence',
+        fields: [
+          {
+            name: 'appendicesAndSupportingMaterials',
+            label: 'Appendices and Supporting Materials',
+            type: 'textarea',
+            required: false,
+            placeholder: 'List any appendices, references, CVs, letters of support, or other supporting materials. Include data management plans, IRB approvals, facility descriptions, or other relevant documents.',
+            icon: FiPaperclip,
+            rows: 10
+          }
+        ]
+      }
     };
 
     const currentConfig = stepConfigs[currentStep];
@@ -397,14 +531,22 @@ const ProposalBuilder = () => {
           <div>
             <h2 className="text-2xl font-bold text-gray-900">{currentConfig.label}</h2>
             <p className="text-gray-600 mt-1">{currentConfig.description}</p>
+            <div className="mt-2 inline-flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-full">
+              <span className="text-xs font-medium text-gray-700">
+                {steps[currentStep - 1].required ? 'Required Section' : 'Optional Section'}
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Progress Bar */}
+        {/* Progress Bar for current step */}
         {stepProgress[currentStep] !== undefined && (
           <div className="mb-6">
             <div className="flex justify-between text-sm text-gray-600 mb-2">
-              <span>Step Completion</span>
+              <span className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-gradient-to-r from-emerald-500 to-green-500"></div>
+                Section Completion
+              </span>
               <span>{Math.round(stepProgress[currentStep])}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
@@ -423,6 +565,7 @@ const ProposalBuilder = () => {
           {currentConfig.fields.map((field) => {
             const FieldIcon = field.icon;
             const error = errors[field.name];
+            const value = formData[field.name];
             
             return (
               <div key={field.name} className="space-y-2">
@@ -438,7 +581,7 @@ const ProposalBuilder = () => {
                   <div className="relative">
                     <textarea
                       name={field.name}
-                      value={formData[field.name]}
+                      value={value}
                       onChange={handleInputChange}
                       rows={field.rows || 10}
                       className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 ${
@@ -448,7 +591,7 @@ const ProposalBuilder = () => {
                       required={field.required}
                     />
                     <div className="absolute bottom-3 right-3 text-xs text-gray-400">
-                      {formData[field.name]?.length || 0} characters
+                      {value?.length || 0} characters
                     </div>
                   </div>
                 ) : (
@@ -456,7 +599,7 @@ const ProposalBuilder = () => {
                     <input
                       type={field.type}
                       name={field.name}
-                      value={formData[field.name]}
+                      value={value}
                       onChange={handleInputChange}
                       className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 ${
                         error ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
@@ -464,7 +607,7 @@ const ProposalBuilder = () => {
                       placeholder={field.placeholder}
                       required={field.required}
                     />
-                    {field.type === 'number' && (
+                    {field.name === 'fundingAmount' && (
                       <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                         USD
                       </div>
@@ -493,20 +636,57 @@ const ProposalBuilder = () => {
             <FiHelpCircle className="text-primary flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-sm text-gray-700">
-                <strong>Tip:</strong> {currentStep === 1 ? 'Make your project title clear and memorable. Keep your cover letter concise but compelling.' :
-                currentStep === 2 ? 'Write this section last if needed. Summarize the most important points from your entire proposal.' :
-                'Be specific and provide enough detail for reviewers to understand your approach.'}
+                <strong>Tip:</strong> {
+                  currentStep === 1 ? 'Make your project title clear and memorable. Keep your cover letter concise but compelling.' :
+                  currentStep === 2 ? 'Write this section last if needed. Summarize the most important points from your entire proposal.' :
+                  currentStep === 3 ? 'Cite relevant literature to establish credibility. Show how your work builds on existing knowledge.' :
+                  currentStep === 4 ? 'Use statistics and evidence to demonstrate the scale and urgency of the problem.' :
+                  currentStep === 5 ? 'Use bullet points or numbered lists for clarity. Make objectives specific and measurable.' :
+                  currentStep === 6 ? 'Focus on practical applications and market potential. Mention any existing partnerships or IP.' :
+                  currentStep === 7 ? 'Be detailed but realistic. Justify every expense in relation to project objectives.' :
+                  currentStep === 8 ? 'Include buffer time for unexpected delays. Align milestones with funding reporting requirements.' :
+                  currentStep === 9 ? 'Define clear success metrics. Explain how data will be collected and analyzed.' :
+                  currentStep === 10 ? 'Show long-term thinking. Mention institutional commitments and alternative funding sources.' :
+                  currentStep === 11 ? 'Keep appendices relevant and organized. Reference them appropriately in the main text.' :
+                  'Be specific and provide enough detail for reviewers to understand your approach.'
+                }
               </p>
               <p className="text-xs text-gray-500 mt-2">
-                Character count will help you stay within typical length requirements
+                Character count will help you stay within typical length requirements. Aim for 500-1500 words per major section.
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Word Count Summary */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl border border-blue-200">
+            <div className="text-sm font-medium text-blue-700 mb-1">Current Section</div>
+            <div className="text-2xl font-bold text-blue-900">
+              {formData[Object.keys(formData)[currentStep + 1]]?.length || 0}
+            </div>
+            <div className="text-xs text-blue-600">characters</div>
+          </div>
+          <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 p-4 rounded-xl border border-emerald-200">
+            <div className="text-sm font-medium text-emerald-700 mb-1">Total So Far</div>
+            <div className="text-2xl font-bold text-emerald-900">
+              {Object.values(formData).reduce((sum, val) => sum + (val?.length || 0), 0)}
+            </div>
+            <div className="text-xs text-emerald-600">total characters</div>
+          </div>
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl border border-purple-200">
+            <div className="text-sm font-medium text-purple-700 mb-1">Completion</div>
+            <div className="text-2xl font-bold text-purple-900">
+              {Math.round((currentStep / steps.length) * 100)}%
+            </div>
+            <div className="text-xs text-purple-600">of all sections</div>
           </div>
         </div>
       </motion.div>
     );
   };
-
+ 
+ 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-white">
       <Navbar />
