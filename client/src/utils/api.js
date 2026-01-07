@@ -1,16 +1,8 @@
 import axios from "axios";
 
-// const API_URL = '/api';
-// Use environment variable if available, otherwise fallback to localhost (for dev)
-// Note: We remove the '/api' suffix here if your backend routes already include it,
-// or keep it if your VITE_API_URL is just the domain.
-// Based on your server.js, you mount routes at '/api/auth', etc.
-
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-const MCP_URL =
-  import.meta.env.VITE_MCP_URL ||
-  "https://mcp-server-and-langgraph-agent-production.up.railway.app/mcp";
+const MCP_URL = import.meta.env.VITE_MCP_URL ||"https://amirhashmi017-mcp-server-and-langgraph-agent.hf.space/";
 
 const getAuthToken = () => {
   return localStorage.getItem("token") || null;

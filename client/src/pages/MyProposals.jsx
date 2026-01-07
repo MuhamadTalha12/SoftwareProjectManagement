@@ -17,9 +17,7 @@ import {
   FiCheck,
   FiDollarSign,
   FiCalendar,
-  FiChevronRight,
   FiRefreshCw,
-  FiExternalLink,
   FiMessageSquare
 } from 'react-icons/fi';
 
@@ -45,7 +43,17 @@ const MyProposals = () => {
 
   const fetchProposals = async () => {
     try {
-      const { data } = await api.get('/proposals');
+      // FIX: Get user ID from localStorage
+      const userId = localStorage.getItem('user_id');
+      
+      if (!userId) {
+        console.error("No user ID found, cannot fetch proposals");
+        return;
+      }
+
+      // FIX: Append userId to the URL to match backend route GET /:userid
+      const { data } = await api.get(`/proposals/${userId}`);
+      
       const generatedProposals = data.filter(p => p.status === 'generated');
       setProposals(generatedProposals);
     } catch (err) {

@@ -74,7 +74,11 @@ const ProposalBuilder = () => {
 
   const fetchProposal = async () => {
     try {
-      const { data } = await api.get(`/proposals/${id}`);
+      // Logic assumes you might need userId here too if your backend GET /:id route changes to /:userid/:id
+      // For now, based on your proposalController.js, getProposal uses req.params.userid
+      const userId = user?.id || localStorage.getItem('user_id');
+      const { data } = await api.get(`/proposals/${userId}/${id}`);
+      
       setFormData({
         projectTitle: data.projectTitle || '',
         fundingAgency: data.fundingAgency || '',
@@ -224,10 +228,14 @@ const ProposalBuilder = () => {
   const saveDraft = async () => {
     setIsSaving(true);
     try {
+      // FIX: Get User ID
+      const userId = user?.id || localStorage.getItem('user_id');
+      
       const payload = {
         ...formData,
         fundingAmount: parseFloat(formData.fundingAmount) || 0,
         status: 'draft',
+        userid: userId, // FIX: Include userid
       };
       
       if (id) {
@@ -252,10 +260,14 @@ const ProposalBuilder = () => {
 
     setLoading(true);
     try {
+      // FIX: Get User ID
+      const userId = user?.id || localStorage.getItem('user_id');
+
       const payload = {
         ...formData,
         fundingAmount: parseFloat(formData.fundingAmount) || 0,
         status: 'submitted',
+        userid: userId, // FIX: Include userid
       };
       
       let proposalId = id;
@@ -270,9 +282,11 @@ const ProposalBuilder = () => {
       setGeneratedProposal(data.generatedProposal);
       setShowPreview(true);
       
+      // FIX: Include userid in the final update call as well
       await api.put(`/proposals/${proposalId}`, {
         generatedProposal: data.generatedProposal,
         status: 'generated',
+        userid: userId, // FIX: Required for update validation
       });
       
       showSuccess('Proposal generated successfully!');
