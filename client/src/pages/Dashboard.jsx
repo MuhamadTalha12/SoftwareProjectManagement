@@ -51,8 +51,18 @@ const Dashboard = () => {
 
   const fetchProposals = async () => {
     try {
+      // FIX: Get user ID from localStorage to match backend requirement
+      const userId = localStorage.getItem('user_id');
+      
+      if (!userId) {
+        console.warn('No user ID found, skipping remote fetch');
+        setLoading(false);
+        return;
+      }
+
       // 1. Fetch from Database (Primary Source)
-      const { data } = await api.get('/proposals');
+      // FIX: Append userId to the URL
+      const { data } = await api.get(`/proposals/${userId}`);
       const remoteList = Array.isArray(data) ? data.map(normalizeProposal) : [];
 
       // 2. Fetch from Local Storage (Backup/Offline drafts)
